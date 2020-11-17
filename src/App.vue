@@ -1,37 +1,9 @@
 <template>
-  <div class="container">
-    <div class="block" :class="{animate: animatedBlock}"></div>
-    <button @click="animateBlock">Animate</button>
-  </div>
-  <div class="container">
-    <transition 
-      :css="false" 
-      @enter="enter"
-      @after-enter="afterEnter" 
-      v-on:before-enter="beforeEnter" 
-      @before-leave="beforeLeave"
-      @leave="leave"
-      @after-leave="afterLeave"
-      @enter-cancelled="enterCancelled"
-      @leave-cancelled="leaveCancelled"
-    >
-      <p v-if="paraIsVisible">This is only sometimes visible...</p>
-    </transition>
-    <button @click="toggleParagraph">Toggle Paragraph</button>
-  </div>
-  <div class="container">
-    <transition name="fade-button" mode="out-in">
-      <button @click="showUsers" v-if="!usersAreDisplayed">Show users</button>
-      <button @click="hideUsers" v-else>Hide Users</button>
-    </transition>
-  </div>
-  <base-modal @close="hideDialog" :open="dialogIsVisible">
-    <p>This is a test dialog!</p>
-    <button @click="hideDialog">Close it!</button>
-  </base-modal>
-  <div class="container">
-    <button @click="showDialog">Show Dialog</button>
-  </div>
+  <router-view v-slot="slotProps">
+      <transition name="fade-button" mode="out-in">
+        <component :is="slotProps.Component"></component>
+      </transition>
+  </router-view>
 </template>  
 
 <script>
@@ -185,6 +157,16 @@ button:active {
 .fade-button-enter-to,
 .fade-button-leave-from {
   opacity: 1;
+}
+
+.route-enter-from {}
+.route-enter-active {
+  animation: slide-scale 0.4s ease-out;
+}
+.route-enter-to {}
+
+.route-leave-active {
+  animation: slide-scale 0.4s ease-in;
 }
 
 @keyframes slide-scale {
